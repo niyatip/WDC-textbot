@@ -1,9 +1,32 @@
 # Text Bot [![Build Status](https://travis-ci.org/watson-developer-cloud/text-bot.svg?branch=master)](https://travis-ci.org/watson-developer-cloud/text-bot)
 
-
 <p align="center">
   <img src="http://g.recordit.co/mfjBM2ZJEn.gif" alt="demo" />
 </p>
+
+# Building Text Message Chat Bot using Watson Application Starter Kit 
+# Type: Hands-on Lab
+
+## Overview:
+
+IBM Watson it is a cognitive technology platform that uses Natural Language Processing, Vision, Machine and Deep Learning to reveal insights from large amounts of unstructured data.  Attendees, of all skill levels, will learn how to build a Bot application powered by Watson, gaining experience using cognitive and deep learning technologies.
+
+In this lab, attendees will start building their application using a Watson Application Starter Kit called Text Message Bot to jumpstart the development of the Bot. For more information on this, refer to URL [Text Message Bot]()
+
+##Prerequisite:
+- [Sign up for BlueMix](http://www.ibm.com/cloud-computing/bluemix/)
+- [Install GIT](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [Install CLOUD FOUNDRY] (https://github.com/cloudfoundry/cli)
+
+##Introduction:
+IBM Watson offers a broad set of services to enable developers to build cognitive solutions. Cognitive Computing Systems are defined as systems that __understand__, __reason__, and __learn__ to assist humans in making better decisions by penetrating the complexity of Big Data. 
+
+This application uses Watson Conversation and the AlchemyLanguage APIs. To help with the task of understanding natural language, Alchemy Language services are designed to extract keywords, entities, relations, sentiment, and concepts expressed in text. In this lab, we will step through the process of building a [Node.js](https://nodejs.org/en/) app that uses Alchemy Language to extract entities and intents from the Conversation API results that are then transmitted to the Weather API to extract weather forecast data for a city in the US.
+
+## Bluemix App
+To leverage any of the Watson Developer Cloud services (including Alchemy Language), you need to create a service instance in Bluemix, which, upon success, returns credentials that you can use in accessing the service.
+
+To start, we will build a simple app using node.js runtime and host it on Bluemix, IBM’s platform-as-a-service solution. You should have signed up for Bluemix account already. If not, go to [Bluemix](http://bluemix.net) and sign up for a Bluemix account.
 
 ## Installation
 
@@ -33,7 +56,17 @@ This application is written in [Node.js](http://nodejs.org/) and uses the [npm](
 
 4. If it is not already installed on your system, install [Node.js](http://nodejs.org/). Installing Node.js will also install the `npm` command. Make sure to use node version 4.2.1 or later, as specified in `package.json`, or you may run into problems when installing other mandatory Node.js packages.
 
-5. <a name="edityml">Edit the `manifest.yml` file</a> in the folder that contains your clone of the repository and replace `application-name` with a unique name for your copy of the application. The name that you specify determines the application's URL, such as `application-name.mybluemix.net`. The relevant portion of the `manifest.yml` file looks like the following:
+5. Open a terminal window
+
+6. mkdir $WORKDIR
+
+7.   cd $WORKDIR
+
+8.   git clone https://github.com/watson-developer-cloud/WDC-textbot.git
+ 
+9.   cd to your WDC-textbot directory.
+
+10.    <a name="edityml">Edit the `manifest.yml` file</a> in the folder that contains your clone of the repository and replace `application-name` with a unique name for your copy of the application. The name that you specify determines the application's URL, such as `application-name.mybluemix.net`. The relevant portion of the `manifest.yml` file looks like the following:
 
         declared-services:
         conversation-service:
@@ -108,6 +141,8 @@ This application is written in [Node.js](http://nodejs.org/) and uses the [npm](
 
         cp .env.example .env
 
+    You will update the `.env` with the information you retrieved in steps 8 - 11.
+
     The `.env` file will look something like the following:
 
       USE_WEBUI=true
@@ -149,32 +184,71 @@ This application is written in [Node.js](http://nodejs.org/) and uses the [npm](
 
 
 
-13. The Conversation service must be trained before you can successfully use this application. The training data is provided in the file `resources/conversation-training-data.json` in your checkout of the repository. To train the model used by the Conversation service for this SK, do the following:
+13. For Cloudant, use the Cloundant DB console to create a new database called **"botdb"**. 
+I.  Login to [Bluemix](https://console.ng.bluemix.net/)
+II. Login using your Bluemix credentials by selecting the “Log In” button in the top right
+III.  After logging in, you will land a page displaying your current application and service instances. Scroll down to the “All Services” section and find the line for “cloudantNoSQLDB-service”
+IV. Click on the “cloudantNoSQLDB-service” line to open the service details page
+V.  Once on the service details page, click the green “Launch” button. This will take you to the Cloudant web UI to manage your databases.
+VI. Once the web UI loads, click “Databases” on the left hand nav bar
+VII.  On the “Databases” page, click the “Create Database” button in the top right corner
+VIII. Name the database “botdb” and select “Create”
+
+14. For Weather Lookup, replace the Weather URL value in your .env with https://twcservice.mybluemix.net/api/weather 
+
+15. The Conversation service must be trained before you can successfully use this application. The training data is provided in the file `resources/conversation-training-data.json` in your checkout of the repository. To train the model used by the Conversation service for this SK, do the following:
 
     1. Login to Bluemix
 
-    2. Select **Dashboard** from the page heading
+    2. Navigate to upper left hand side and click on the 3 parallel lines and select **Dashboard** from the left hand navigation panel.
 
-    3. Select the instance of the Conversation service that you are using
+    3. Scroll down and under "All Services" - select the instance of the Conversation service that you are using
 
-    4. Scroll down (if necessary) and click **Launch tool**. (You may be asked to log in again.)
+    4. Once on the Service details page, scroll down (if necessary) and click green **Launch tool** button on the right hand side of the page. (You may be asked to log in again. or you may see a blank screen - give it a few minutes and refresh the screen/). This will launch the tooling for the Conversation service, which allows you to build dialog flows and train your chatbot. This should take you to your workspace in the Conversation service which represents a unique set of chat flows and training examples. This allows you to have multiple chatbots within a single instance of the Conversation service. 
 
-    5. Click **Choose a file**, navigate to the `resources` directory of your clone of the repository for this project, and select the file `conversation-training-data.json`
+    5. Once on the page, you will see the option to either “Create” a new workspace, or “import” an existing one. We are going to “import” a premade chatbot for this example, so select “Import
+    
+    6. Click **Choose a file**, navigate to the `resources` directory of your clone of the repository for this project, and select the file `conversation-training-data.json`.  Once the file is selected, ensure that the “Everything (Intents, Entities, and Dialog” option is selected.
+    
+    7. Click **Import** to upload the `.json` file, create a workspace, and train the model used by the Conversation service.
 
+    To find your workspace ID once training has completed, click the three vertical dots in the upper right-hand corner of the Workspace pane, and select **View details**.  Once the upload is complete, you will see a new workspace called “Weather Bot ASK”. In order to connect this workspace to our application, we will need to include the Workspace ID in our environment variables file “.env”.  
 
-    6. Click **Import** to upload the `.json` file, creates a workspace, and trains the model used by the Conversation service.
+    Go back into your “.env” file, and paste the workspace ID next to the “WORKSPACE_ID=” entry.
 
-    To find your workspace ID once training has completed, click the three vertical dots in the upper right-hand corner of the Workspace pane, and select **View details**.
+##Deploying your Bot to Bluemix    
 
-14. Push the updated application live by running the following command:
+14. Using command line or terminal, push the updated application live by running the following command from your working directory:Push the updated application live by running the following command:
 
+    cf login https://api.ng.bluemix.net
     cf push
 
-    or by pressing the following "Deploy to Bluemix" button:
+15. Make sure the cf push command completes successfully using your Bluemix login.  You should go back into your Conversation Service in Blue mix to make sure the training is done. Do the following:
+a.  Login to Bluemix
+b.  Select Dashboard as you did earlier
+c.  Select the instance of the Conversation service that you are using
+d.  Scroll down (if necessary) on the “manage” tab and click Launch tool (you may be asked to log in again or refresh screen)
+e.  Select the name of your app
 
-    [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/watson-developer-cloud/text-bot.git)
+16. On the next window – you will see a graphic with three dots on the far upper-right-hand side – if you click that you will see if it is done training or not. Once that is complete you can actually see content when you run your applications (assuming you have pushed the application to Bluemix)
 
-## Installing the bots
+17. The final message should indicate if the application is deployed successfully and it is started without errors.
+
+## Testing your bots
+
+After completing the steps above, you are ready to test your application. Start a browser and enter the URL of your application.
+
+                  <your application name>.mybluemix.net
+
+You can also find your application name when you click on your application in Bluemix.
+
+Begin entering questions such as “what is the weather for Austin, Texas?” If you don’t enter a state, it will ask you to clarify what state.
+
+Note about the Weather Conversation Pattern:  this Starter Kit uses weather information from the WeatherInsights service to demonstrate how to integrate a bot with the Conversation service available on Bluemix. It provides extension points for integration botkits from vendors such as Facebook and Twilio.
+For a given input (e.g. question about weather **for** Austin, TX), a trained Conversation service instance responds with weather forecast. The service is composed of a model trained with a set of intents and entities (in this case, the intent is to get the forecast and the entities are cities that the user might want to know the forecast for). The dialog agent of the Conversation service is responsible for interacting with the user and keeping track of the context of the conversation so that it can provide answers to follow up questions about the same topic.
+
+
+## 1. Installing the Bots to work with Facebook Messenger or Twilio
 
 1. Edit the `.env` file to add credentials for Facebook and Twilio. See the following links for information about where you can get the credentials required by the botkit for each service:
 
@@ -190,132 +264,3 @@ This application is written in [Node.js](http://nodejs.org/) and uses the [npm](
 This Starter Kit uses weather information from the WeatherInsights service to demonstrate how to integrate a bot with the Conversation service available on Bluemix. It provides extension points for integration botkits from vendors such as Facebook and Twilio.
 
 For a given input *(e.g. question about weather in Austin, TX)* , a trained Conversation service instance responds with weather forecast. The service is composed of a model trained with a set of intents and entities (in this case, the intent is to get the forecast and the entities are cities that the user might want to know the forecast for). The dialog agent of the Conversation service is responsible for interacting with the user and keeping track of the context of the conversation so that it can provide answers to follow up questions about the same topic.
-
-## Running locally
-First, make sure that you followed steps 1 through 11 in the [Getting Started](#Getting Started) and that you are still logged in to Bluemix.
-
-1. Make sure you have created the Alchemy Language, Conversation, Cloudant, and WeatherInsights services and updated the credentials information for those services in your `.env` file, as explained in the previous section.
-
-2. Execute the following command to pick up the environment specified for your application based on its name in your `manifest.yml` file:
-
-        cf env <application-name>
-
-2. Install any dependencies that a local version of your application requires:
-
-        npm install
-
-    **Note** If you run into problems during installation, you might want to update your node version. Get version 4.4.7 or above.
-
-4. Open `http://localhost:3000` to see the running application.
-
-## Adapting/Extending the Starter Kit
-
-The following image provides a general overview of how botkits from external services can interact with Watson services.
-
-<a>
-# Architecture Diagram
-</a>
-
-![](readme_images/TextBot-ArchitectureFlow.jpg)
-
-This Starter Kit uses  weather data from the WeatherInsights service and can easily be extended to integrate with botkits from vendors such as Facebook and Twilio. However, the concepts used here are platform independent and can be applied to a use cases other than providing forecasts. To do so, define your use case in the Conversation service, configuring your Conversation by using the tool provided on the dashboard page for your instance of the Conversation service. You can also integrate other bots as mentioned on the [Installing the bots](#bot-installation) section.
-
-
-## Reference information
-The following links provide more information about the Conversation, WeatherInsights, and Alchemy Language services.
-
-### Conversation service
-  * [API documentation](http://www.ibm.com/watson/developercloud/doc/conversation/): Get an in-depth knowledge of the Conversation service
-  * [API reference](http://www.ibm.com/watson/developercloud/conversation/api/v1/): SDK code examples and reference
-  * [API Explorer](https://watson-api-explorer.mybluemix.net/apis/conversation-v1): Try out the API
-  * [Creating your own conversation service instance](http://www.ibm.com/watson/developercloud/doc/conversation/convo_getstart.shtml): How to use the API to create and use your own classifier
-
-### Weather service
-  * [API documentation](https://console.ng.bluemix.net/docs/services/Weather/index.html?pos=2): Get an in-depth understanding of the Weather Insights services
-  * [API reference](https://console.ng.bluemix.net/docs/services/Weather/weather_tutorials_samples.html#tutorials_samples): Code examples and reference
-  * [API Explorer](https://console.ng.bluemix.net/docs/services/Weather/weather_rest_apis.html#rest_apis): Try out the REST API
-
-### Alchemy Language
-  * [API documentation](http://www.alchemyapi.com/api): Get an in-depth understanding of the AlchemyAPI services
-  * [AlchemyData News reference](http://docs.alchemyapi.com/): API and query gallery
-
-### Cloudant service
-  * [API documentation](https://console.ng.bluemix.net/docs/services/Cloudant/index.html#Cloudant): Get an in-depth understanding of the Cloudant services
-  * [API reference](https://docs.cloudant.com/api.html#-api-reference): Code examples and reference
-
-## Best Practices
-
-Most of the best practices associated with writing a conversational application are explained within the [documentation for the Conversation service](http://www.ibm.com/watson/developercloud/doc/conversation/). These can be grouped into several general areas, as described in the next few sections.
-
-### Intents
-  * When defining intents, follow naming conventions to create consistent intents.
-  * Use "-" to separate multiple levels (Example : location-weather-forecast)
-  * Use "_" to separate multiple word intents (Example : business_center)
-  * Provide more variations of input via examples for each intent. The more variations the better.
-  * Avoid overlapping intents across examples. (Example : benefits_eligibility and benefits_elgibility_employee). To avoid this, group examples into a single intent and use entities to deal with subtle variations.
-  * Examples for intents should be representative of end user input
-
-### Entities
-  * Use entities from within the conversation tooling when dealing with a concise and well-defined set of entities (Example : days of the week). Refer to [Entities](https://www.ibm.com/watson/developercloud/doc/conversation/entity_ovw.shtml) section within the Watson Conversation Service documentation.
-  * Use synonyms to capture variations of the entity. This may include acronyms, abbreviations, multi-word variations.
-  * Use Alchemy Entity Extraction API to provide a more open set of entities (Examples : City names). For a more advanced cases or special domains, it may be necessary to create a custom model which is beyond the scope of this starter kit.
-
-### Dialog
-  * Use context variables to maintain state or pass information between your bot and the application. Refer to [Context variables](https://www.ibm.com/watson/developercloud/doc/conversation/advanced_overview.shtml#advanced_context) section within the Watson Conversation Service Documentation.
-
-### General
-  * Use the Bot controller (controller.js) to maintain calls to external APIs such as Weather, Stocks or to enterprise systems such as HR, Payroll or CRM systems.
-
-
-## Troubleshooting
-
-To troubleshoot your Bluemix application, use the logs. To see the logs, run:
-
-  ```bash
-  cf logs <application-name> --recent
-  ```
-
-This sample application implements fairly narrow use cases. Abbreviations for cities are generally not supported - you will need to specify the full name of your city and state.
-
-You may notice that the demo becomes unresponsive when you use the word "in" within a question, such as "What is the weather in Boston?". This simple application is designed to help you get started, and therefore does not implement detailed error checking or sophisticated question parsing.
-
-## Debugging the application
-
-  To debug the application, go to `https://text-bot.mybluemix.net/debug.html` to see a panel that shows metadata which contains details on the interaction with the services being used.
-
-## License
-
-  This sample code is licensed under Apache 2.0. Full license text is available in [LICENSE](LICENSE).
-
-## Contributing
-
-  See [CONTRIBUTING](CONTRIBUTING.md).
-
-## Open Source @ IBM
-
-  Find more open source projects on the [IBM GitHub Page](http://ibm.github.io/)
-
-### Privacy Notice
-
-This node sample web application includes code to track deployments to Bluemix and other Cloud Foundry platforms. The following information is sent to a Deployment Tracker service on each deployment:
-
-* Application Name (`application_name`)
-* Space ID (`space_id`)
-* Application Version (`application_version`)
-* Application URIs (`application_uris`)
-
-This data is collected from the `VCAP_APPLICATION` environment variable in IBM Bluemix and other Cloud Foundry platforms. This data is used by IBM to track metrics around deployments of sample applications to IBM Bluemix. Only deployments of sample applications that include code to ping the Deployment Tracker service will be tracked.
-
-### Disabling Deployment Tracking
-
-Deployment tracking can be disabled by removing `require('cf-deployment-tracker-client').track();` from the beginning of the `server.js` file at the root of this repository.
-
-[deploy_track_url]: https://github.com/cloudant-labs/deployment-tracker
-[cloud_foundry]: https://github.com/cloudfoundry/cli
-[sign_up]: https://console.ng.bluemix.net/registration/
-[get-alchemyapi-key]: https://console.ng.bluemix.net/catalog/services/alchemyapi/
-
-[conversation]: http://www.ibm.com/watson/developercloud/doc/conversation/
-[alchemy-language]: http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/alchemy-language.html
-[weatherinsights]: https://bluemix.net/catalog/weatherinsights
-[cloudantNoSQLDB]: https://console.ng.bluemix.net/docs/services/Cloudant/index.html#Cloudant
