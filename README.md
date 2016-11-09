@@ -34,25 +34,15 @@ This is a Starter Kit (SK), which is designed to get you up and running quickly 
 
 A running instance of the application in this Starter Kit is available as a [demo](https://text-bot.mybluemix.net). The demo does not include Facebook or Twilio integration. Running the application using the Facebook and Twilio bots requires credentials to access their services. For information about obtaining credentials and integrating Twilio and Facebook bots, see [Installing the bots](#bot-installation).
 
-## Table of Contents
- - [Getting Started](#getting-started)
- - [Installing the bots](#bot-installation)
- - [About the Weather conversation pattern](#about-the-weather-conversation-pattern)
- - [Running the application locally](#running-locally)
- - [Adapting/Extending the Starter Kit](#adaptingextending-the-starter-kit)
- - [Best Practices](#best-practices)
- - [Troubleshooting](#troubleshooting)
- - [Debugging the application](#debugging)
-
 ## Getting Started
 
 This application is written in [Node.js](http://nodejs.org/) and uses the [npm](https://www.npmjs.com/), the Node Package Manager, command to install a software development kit (SDK) for the Watson Developer Cloud services, as well as to satisfy other dependencies. The following instructions include Instructions for downloading and installing these.
 
-1. Log into GitHub and clone [the repository for this application](https://github.com/watson-developer-cloud/text-bot). Change to the folder that contains your clone of this repository.
+1. Log into GitHub and clone [the repository for this application](https://github.com/niyatip/WDC-textbot). Change to the folder that contains your clone of this repository.
 
 2. [Create a Bluemix Account](sign_up) if you do not already have one, or use an existing account.
 
-3. If it is not already installed on your system, download and install the [Cloud-foundry command-line interface (CLI)](https://github.com/cloudfoundry/cli#downloads)[cloud_foundry] tool.
+3. If it is not already installed on your system, download and install the [Cloud-foundry command-line interface (CLI)][cloud_foundry] tool.
 
 4. If it is not already installed on your system, install [Node.js](http://nodejs.org/). Installing Node.js will also install the `npm` command. Make sure to use node version 4.2.1 or later, as specified in `package.json`, or you may run into problems when installing other mandatory Node.js packages.
 
@@ -60,13 +50,13 @@ This application is written in [Node.js](http://nodejs.org/) and uses the [npm](
 
 6. mkdir $WORKDIR
 
-7.   cd $WORKDIR
+7. cd $WORKDIR
 
-8.   git clone https://github.com/watson-developer-cloud/WDC-textbot.git
+8. git clone https://github.com/watson-developer-cloud/WDC-textbot.git
  
-9.   cd to your WDC-textbot directory.
+9. cd to your WDC-textbot directory.
 
-10.    <a name="edityml">Edit the `manifest.yml` file</a> in the folder that contains your clone of the repository and replace `application-name` with a unique name for your copy of the application. The name that you specify determines the application's URL, such as `application-name.mybluemix.net`. The relevant portion of the `manifest.yml` file looks like the following:
+10. <a name="edityml">Edit the `manifest.yml` file</a> in the folder that contains your clone of the repository and replace `application-name` with a unique name for your copy of the application. The name that you specify determines the application's URL, such as `application-name.mybluemix.net`. The relevant portion of the `manifest.yml` file looks like the following:
 
         declared-services:
         conversation-service:
@@ -97,21 +87,21 @@ This application is written in [Node.js](http://nodejs.org/) and uses the [npm](
 
 7. Create instances of the services that are used by the application. If you already have instances of the Alchemy Language service, you can use that instances and its API key:
 
-     - Create an instance of the [Conversation][conversation] service by running the following command:
+     - Create an instance of the [Conversation](http://www.ibm.com/watson/developercloud/doc/conversation/) service by running the following command:
 
         cf create-service conversation free conversation-service
 
-    - If you do not already have one, create an instance of the [Alchemy Language](alchemy-language) service by running the following command:
+    - If you do not already have one, create an instance of the [Alchemy Language](http://www.ibm.com/watson/developercloud/alchemy-language.html) service by running the following command:
 
         cf create-service alchemy_api free alchemy-language-service
 
         **IMPORTANT:** This application performs best when you use an Alchemy API key that supports high transaction limits. The free Alchemy API key has a limit of 1000 transactions per day.  You can upgrade to the Standard or Advanced Plan of the Alchemy API service to obtain a key that supports more than 1000 transactions per day. To upgrade to the Standard or Advanced plans, you will need to add a credit card to your Bluemix account. For plan and pricing information, click [here](https://console.ng.bluemix.net/catalog/services/alchemyapi/).
 
-    - Create an instance of the [Weather Insights service](weatherinsights) by running the following command:
+    - Create an instance of the [Weather Insights service](https://console.ng.bluemix.net/docs/services/InsightsWeather/index.html) by running the following command:
 
         cf create-service weatherinsights Free-v2 weatherinsights-service
 
-    - Create an instance of the [Cloudant NoSQL database](cloudantNoSQLDB) service by running the following command:
+    - Create an instance of the [Cloudant NoSQL database](https://cloudant.com/) service by running the following command:
 
         cf create-service cloudantNoSQLDB Lite cloudantNoSQLDB-service
 
@@ -179,20 +169,23 @@ This application is written in [Node.js](http://nodejs.org/) and uses the [npm](
       TWILIO_NUMBER=
 
 
-    # Logging
-    DEBUG=bot*,-bot:api:*,-bot:channel:*
+13. For Cloudant, use the Cloudant DB console to create a new database called **"botdb"**. 
 
-
-
-13. For Cloudant, use the Cloundant DB console to create a new database called **"botdb"**. 
-I.  Login to [Bluemix](https://console.ng.bluemix.net/)
-II. Login using your Bluemix credentials by selecting the “Log In” button in the top right
-III.  After logging in, you will land a page displaying your current application and service instances. Scroll down to the “All Services” section and find the line for “cloudantNoSQLDB-service”
-IV. Click on the “cloudantNoSQLDB-service” line to open the service details page
-V.  Once on the service details page, click the green “Launch” button. This will take you to the Cloudant web UI to manage your databases.
-VI. Once the web UI loads, click “Databases” on the left hand nav bar
-VII.  On the “Databases” page, click the “Create Database” button in the top right corner
-VIII. Name the database “botdb” and select “Create”
+    1.  Login to [Bluemix](https://console.ng.bluemix.net/)
+    
+    2.  Login using your Bluemix credentials by selecting the “Log In” button in the top right
+    
+    3.  After logging in, you will land on a page displaying your current application and service instances. Scroll down to the “All Services” section and find the line for “cloudantNoSQLDB-service”
+    
+    4.  Click on the “cloudantNoSQLDB-service” line to open the service details page
+    
+    5.  Once on the service details page, click the green “Launch” button. This will take you to the Cloudant web UI to manage your databases.
+    
+    6.  Once the web UI loads, click “Databases” on the left hand nav bar
+    
+    7.  On the “Databases” page, click the “Create Database” button in the top right corner
+    
+    8.  Name the database “botdb” and select “Create”
 
 14. For Weather Lookup, replace the Weather URL value in your .env with https://twcservice.mybluemix.net/api/weather 
 
@@ -204,9 +197,9 @@ VIII. Name the database “botdb” and select “Create”
 
     3. Scroll down and under "All Services" - select the instance of the Conversation service that you are using
 
-    4. Once on the Service details page, scroll down (if necessary) and click green **Launch tool** button on the right hand side of the page. (You may be asked to log in again. or you may see a blank screen - give it a few minutes and refresh the screen/). This will launch the tooling for the Conversation service, which allows you to build dialog flows and train your chatbot. This should take you to your workspace in the Conversation service which represents a unique set of chat flows and training examples. This allows you to have multiple chatbots within a single instance of the Conversation service. 
+    4. Once on the Service details page, scroll down (if necessary) and click green **Launch tool** button on the right hand side of the page. (You may be asked to log in again. or you may see a blank screen - give it a few minutes and refresh the screen). This will launch the tooling for the Conversation service, which allows you to build dialog flows and train your chatbot. This should take you to your workspace in the Conversation service which represents a unique set of chat flows and training examples. This allows you to have multiple chatbots within a single instance of the Conversation service. 
 
-    5. Once on the page, you will see the option to either “Create” a new workspace, or “import” an existing one. We are going to “import” a premade chatbot for this example, so select “Import
+    5. Once on the page, you will see the option to either “Create” a new workspace, or “import” an existing one. We are going to “import” a premade chatbot for this example, so select “Import".
     
     6. Click **Choose a file**, navigate to the `resources` directory of your clone of the repository for this project, and select the file `conversation-training-data.json`.  Once the file is selected, ensure that the “Everything (Intents, Entities, and Dialog” option is selected.
     
@@ -221,14 +214,20 @@ VIII. Name the database “botdb” and select “Create”
 14. Using command line or terminal, push the updated application live by running the following command from your working directory:Push the updated application live by running the following command:
 
     cf login https://api.ng.bluemix.net
+
     cf push
 
 15. Make sure the cf push command completes successfully using your Bluemix login.  You should go back into your Conversation Service in Blue mix to make sure the training is done. Do the following:
-a.  Login to Bluemix
-b.  Select Dashboard as you did earlier
-c.  Select the instance of the Conversation service that you are using
-d.  Scroll down (if necessary) on the “manage” tab and click Launch tool (you may be asked to log in again or refresh screen)
-e.  Select the name of your app
+
+  a.  Login to Bluemix
+
+  b.  Select Dashboard as you did earlier
+
+  c.  Select the instance of the Conversation service that you are using
+
+  d.  Scroll down (if necessary) on the “manage” tab and click Launch tool (you may be asked to log in again or refresh screen)
+  
+  e.  Select the name of your app
 
 16. On the next window – you will see a graphic with three dots on the far upper-right-hand side – if you click that you will see if it is done training or not. Once that is complete you can actually see content when you run your applications (assuming you have pushed the application to Bluemix)
 
