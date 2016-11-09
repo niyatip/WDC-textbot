@@ -52,7 +52,7 @@ This application is written in [Node.js](http://nodejs.org/) and uses the [npm](
 
 2. [Create a Bluemix Account](sign_up) if you do not already have one, or use an existing account.
 
-3. If it is not already installed on your system, download and install the [Cloud-foundry command-line interface (CLI)][cloud_foundry] tool.
+3. If it is not already installed on your system, download and install the [Cloud-foundry command-line interface (CLI)](https://github.com/cloudfoundry/cli#downloads)[cloud_foundry] tool.
 
 4. If it is not already installed on your system, install [Node.js](http://nodejs.org/). Installing Node.js will also install the `npm` command. Make sure to use node version 4.2.1 or later, as specified in `package.json`, or you may run into problems when installing other mandatory Node.js packages.
 
